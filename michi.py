@@ -33,6 +33,12 @@ import random
 import re
 import sys
 
+if sys.version_info >= (3, 0):
+    from functools import reduce
+    
+    def raw_input(a):
+        return input(a)
+
 
 # Given a board of size NxN (N=9, 19, ...), we represent the position
 # as an (N+1)*(N+2) string, with '.' (empty), 'X' (to-play player),
@@ -1019,7 +1025,8 @@ def game_io(computer_black=False):
                     continue
 
                 # Find the next node in the game tree and proceed there
-                nodes = filter(lambda n: n.pos.last == c, tree.children)
+                nodes = list(filter(lambda n: n.pos.last == c, tree.children)) \
+                    if sys.version_info >= (3, 0) else filter(lambda n: n.pos.last == c, tree.children)
                 if not nodes:
                     print('Bad move (rule violation)')
                     continue
